@@ -111,8 +111,15 @@ const RedditMastermind = () => {
   };
 
   // CORE: Call OpenAI API
-  const callLLM = async (prompt, temperature = 0.8) => {
+  const callLLM = async (prompt: string, temperature: number = 0.8): Promise<string | null> => {
     try {
+      const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+      
+      if (!apiKey) {
+        console.error('API key not found');
+        return null;
+      }
+
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -138,7 +145,6 @@ const RedditMastermind = () => {
       return null;
     }
   };
-
   // Parse JSON from LLM response
   const parseJSON = (text) => {
     try {
